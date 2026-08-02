@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { createDummyRoom } from './actions';
 
 export default function CreatePage() {
   return (
@@ -8,14 +9,16 @@ export default function CreatePage() {
         <p className="mt-3 text-slate-300">
           Start a new duel and share the room code with a friend.
         </p>
-        <form action="/api/create-room" method="post" className="mt-8 space-y-4">
+        <form action={createDummyRoom} className="mt-8 space-y-4">
           <input
             type="text"
             name="playerId"
             placeholder="Player name"
+            defaultValue="Test Player"
             className="w-full rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-white outline-none ring-0"
             required
           />
+          <p className="text-sm text-slate-400">Using “Test Player” will open the demo room with code 00000.</p>
           <button
             type="submit"
             className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100"

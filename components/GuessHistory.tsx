@@ -1,3 +1,5 @@
+import { FeedbackIndicators } from './FeedbackIndicators';
+
 interface GuessHistoryProps {
   guesses: Array<{
     guess: string;
@@ -8,23 +10,38 @@ interface GuessHistoryProps {
 
 export function GuessHistory({ guesses }: GuessHistoryProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-        Guess history
-      </h3>
+    <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-4 shadow-[0_18px_70px_rgba(2,6,23,0.35)] sm:p-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-slate-400">Track</p>
+          <h3 className="mt-1 text-xl font-semibold text-white">Guess history</h3>
+        </div>
+        <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300">
+          {guesses.length} turns
+        </span>
+      </div>
+
       {guesses.length === 0 ? (
-        <p className="text-sm text-slate-500">No guesses yet.</p>
+        <div className="mt-4 rounded-[22px] border border-dashed border-slate-700 bg-slate-950/60 p-4 text-sm text-slate-400">
+          No guesses yet. Your first move will appear here.
+        </div>
       ) : (
-        <ul className="space-y-2">
+        <ul className="mt-4 space-y-3">
           {guesses.map((entry, index) => (
             <li
               key={`${entry.guess}-${index}`}
-              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+              className="rounded-[22px] border border-white/10 bg-slate-950/70 p-4 transition"
             >
-              <span className="font-semibold text-slate-700">{entry.guess}</span>
-              <span className="text-slate-500">
-                {entry.correctNumber} correct numbers · {entry.correctPosition} correct positions
-              </span>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">Turn {guesses.length - index}</p>
+                  <p className="mt-1 font-mono text-lg font-semibold tracking-[0.25em] text-white">{entry.guess}</p>
+                </div>
+                <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
+                  {index === 0 ? 'Latest' : 'Past'}
+                </div>
+              </div>
+              <FeedbackIndicators correctNumber={entry.correctNumber} correctPosition={entry.correctPosition} />
             </li>
           ))}
         </ul>

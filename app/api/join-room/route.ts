@@ -3,16 +3,29 @@ import { prisma } from '@/lib/db';
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const roomCode = formData.get('roomCode')?.toString();
-  const playerId = formData.get('playerId')?.toString() ?? 'player2';
+  const roomCode = formData.get('roomCode')?.toString()?.trim();
+  const playerId = formData.get('playerId')?.toString().trim() ?? 'player2';
 
   if (!roomCode) {
     return NextResponse.json({ error: 'Room code is required.' }, { status: 400 });
   }
 
-  const existingGame = await prisma.game.findUnique({
-    where: { roomCode },
+  const isTestRoom = roomCode.toUpperCase() === '00000';
+
+  let existingGame = await prisma.game.findUnique({
+    where: { roomCode: isTestRoom ? '00000' : roomCode },
   });
+
+  if (!existingGame && isTestRoom) {
+    existingGame = await prisma.game.create({
+      data: {
+        roomCode: '00000',
+        status: 'waiting',
+        player1Id: 'Test Player',
+        turn: 'player1',
+      },
+    });
+  }
 
   if (!existingGame) {
     return NextResponse.json({ error: 'Room not found.' }, { status: 404 });

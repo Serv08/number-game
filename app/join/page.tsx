@@ -11,6 +11,7 @@ export default function JoinPage() {
             type="text"
             name="roomCode"
             placeholder="Room code"
+            defaultValue="00000"
             className="w-full rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-white outline-none ring-0"
             required
           />
@@ -18,9 +19,11 @@ export default function JoinPage() {
             type="text"
             name="playerId"
             placeholder="Player name"
+            defaultValue="Test Player"
             className="w-full rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-white outline-none ring-0"
             required
           />
+          <p className="text-sm text-slate-400">Room code 00000 opens the test room for quick local testing.</p>
           <button
             type="submit"
             className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100"
