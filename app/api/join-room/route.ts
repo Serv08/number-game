@@ -1,10 +1,28 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
+async function readPayload(request: Request) {
+  const contentType = request.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json')) {
+    const payload = await request.json().catch(() => ({}));
+    return payload as Record<string, unknown>;
+  }
+
+  const formData = await request.formData().catch(() => null);
+  if (!formData) {
+    return {} as Record<string, unknown>;
+  }
+
+  return Object.fromEntries(
+    Array.from(formData.entries()).map(([key, value]) => [key, value instanceof File ? value.name : value]),
+  ) as Record<string, unknown>;
+}
+
 export async function POST(request: Request) {
-  const formData = await request.formData();
-  const roomCode = formData.get('roomCode')?.toString()?.trim();
-  const playerId = formData.get('playerId')?.toString().trim() ?? 'player2';
+  const payload = await readPayload(request);
+  const roomCode = String(payload.roomCode ?? '').trim();
+  const playerId = String(payload.playerId ?? '').trim() || 'player2';
 
   if (!roomCode) {
     return NextResponse.json({ error: 'Room code is required.' }, { status: 400 });
@@ -43,5 +61,8 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.redirect(new URL(`/room/${game.roomCode}`, request.url));
+  const redirectUrl = new URL(`/room/${game.roomCode}`, request.url);
+  redirectUrl.searchParams.set('playerId', playerId);
+
+  return NextResponse.redirect(redirectUrl);
 }

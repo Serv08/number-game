@@ -5,7 +5,7 @@ export default function JoinPage() {
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-16 text-white">
       <div className="w-full max-w-2xl rounded-3xl border border-slate-800 bg-slate-900/70 p-10 shadow-2xl shadow-slate-950/30">
         <h1 className="text-3xl font-semibold">Join a room</h1>
-        <p className="mt-3 text-slate-300">Enter a room code and your name to join the duel.</p>
+        <p className="mt-3 text-slate-300">Enter a room code and your name to join an active duel.</p>
         <form action="/api/join-room" method="post" className="mt-8 space-y-4">
           <input
             type="text"
@@ -24,10 +24,7 @@ export default function JoinPage() {
             required
           />
           <p className="text-sm text-slate-400">Room code 00000 opens the test room for quick local testing.</p>
-          <button
-            type="submit"
-            className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100"
-          >
+          <button type="submit" className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100">
             Join room
           </button>
         </form>

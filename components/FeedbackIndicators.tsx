@@ -5,20 +5,22 @@ interface FeedbackIndicatorsProps {
 
 export function FeedbackIndicators({ correctNumber, correctPosition }: FeedbackIndicatorsProps) {
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-2">
-      {Array.from({ length: 5 }, (_, index) => {
-        const isCorrectPosition = index < correctPosition;
-        const isCorrectDigit = index < correctNumber;
-        const marker = isCorrectPosition ? '🟢' : isCorrectDigit ? '⚪' : '⚫';
-        return (
-          <span key={`${marker}-${index}`} className="text-xl">
-            {marker}
-          </span>
-        );
-      })}
-      <span className="ml-2 text-sm text-slate-400">
+    <div className="mt-3 space-y-2">
+      <div className="flex flex-wrap items-center gap-2">
+        {Array.from({ length: 4 }, (_, index) => {
+          const isCorrectPosition = index < correctPosition;
+          const isCorrectDigit = index < correctNumber;
+          const marker = isCorrectPosition ? '🟢' : isCorrectDigit ? '⚪' : '⚫';
+          return (
+            <span key={`${marker}-${index}`} className="text-xl">
+              {marker}
+            </span>
+          );
+        })}
+      </div>
+      <p className="text-sm text-slate-400">
         {correctNumber} correct digits • {correctPosition} correct positions
-      </span>
+      </p>
     </div>
   );
 }

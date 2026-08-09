@@ -124,8 +124,9 @@ export function NumberInput({
       <div
         className={`rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm transition-all duration-200 ${error ? 'border-rose-400 ring-2 ring-rose-200' : ''}`}
         tabIndex={disabled || readOnly ? -1 : 0}
-        role="textbox"
+        inputMode="none"
         aria-label={label || placeholder}
+        aria-roledescription="custom numeric input"
         aria-valuetext={value.length > 0 ? value : 'No digits entered'}
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}

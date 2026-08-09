@@ -4,10 +4,12 @@ import { prisma } from '@/lib/db';
 
 interface RoomPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ playerId?: string }>;
 }
 
-export default async function RoomPage({ params }: RoomPageProps) {
+export default async function RoomPage({ params, searchParams }: RoomPageProps) {
   const { id } = await params;
+  const { playerId: requestedPlayerId } = await searchParams;
   const game = await prisma.game.findUnique({
     where: { roomCode: id },
   });
@@ -16,7 +18,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
     notFound();
   }
 
-  const playerId = `player-${game.id.slice(0, 4)}`;
+  const playerId = requestedPlayerId?.trim() || `player-${game.id.slice(0, 4)}`;
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-16 text-slate-900">

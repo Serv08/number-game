@@ -2,9 +2,27 @@ import { NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
 import { prisma } from '@/lib/db';
 
+async function readPayload(request: Request) {
+  const contentType = request.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json')) {
+    const payload = await request.json().catch(() => ({}));
+    return payload as Record<string, unknown>;
+  }
+
+  const formData = await request.formData().catch(() => null);
+  if (!formData) {
+    return {} as Record<string, unknown>;
+  }
+
+  return Object.fromEntries(
+    Array.from(formData.entries()).map(([key, value]) => [key, value instanceof File ? value.name : value]),
+  ) as Record<string, unknown>;
+}
+
 export async function POST(request: Request) {
-  const formData = await request.formData();
-  const playerId = formData.get('playerId')?.toString().trim() ?? 'player1';
+  const payload = await readPayload(request);
+  const playerId = String(payload.playerId ?? '').trim() || 'player1';
   const isTestPlayer = ['test player', 'test', 'demo', 'dummy'].includes(playerId.toLowerCase());
   const roomCode = isTestPlayer ? '00000' : nanoid(6).toUpperCase();
 
@@ -33,5 +51,8 @@ export async function POST(request: Request) {
         },
       });
 
-  return NextResponse.redirect(new URL(`/room/${game.roomCode}`, request.url));
+  const redirectUrl = new URL(`/room/${game.roomCode}`, request.url);
+  redirectUrl.searchParams.set('playerId', playerId);
+
+  return NextResponse.redirect(redirectUrl);
 }

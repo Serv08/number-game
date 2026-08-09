@@ -3,7 +3,53 @@ export type GuessResult = {
   correctPosition: number;
 };
 
+export interface SecretValidationResult {
+  isValid: boolean;
+  message: string;
+  length: number;
+  hasDuplicateDigits: boolean;
+}
+
+export function validateSecret(
+  secret: string,
+  options: { length?: number; allowRepeatingDigits?: boolean } = {},
+): SecretValidationResult {
+  const length = options.length ?? 4;
+  const allowRepeatingDigits = options.allowRepeatingDigits ?? false;
+
+  if (secret.length !== length) {
+    return {
+      isValid: false,
+      message: `Please enter ${length} digits.`,
+      length,
+      hasDuplicateDigits: false,
+    };
+  }
+
+  const hasDuplicateDigits = new Set(secret).size !== secret.length;
+  if (hasDuplicateDigits && !allowRepeatingDigits) {
+    return {
+      isValid: false,
+      message: 'Digits must be unique.',
+      length,
+      hasDuplicateDigits: true,
+    };
+  }
+
+  return {
+    isValid: true,
+    message: 'Looks good.',
+    length,
+    hasDuplicateDigits,
+  };
+}
+
 export function evaluateGuess(secret: string, guess: string): GuessResult {
+  const validation = validateSecret(secret, { length: secret.length, allowRepeatingDigits: true });
+  if (!validation.isValid) {
+    throw new Error(validation.message);
+  }
+
   if (secret.length !== guess.length) {
     throw new Error('Secret and guess must have the same length.');
   }

@@ -7,7 +7,7 @@ export default function CreatePage() {
       <div className="w-full max-w-2xl rounded-3xl border border-slate-800 bg-slate-900/70 p-10 shadow-2xl shadow-slate-950/30">
         <h1 className="text-3xl font-semibold">Create a room</h1>
         <p className="mt-3 text-slate-300">
-          Start a new duel and share the room code with a friend.
+          Start a fresh duel, share the room code, and let the rounds begin.
         </p>
         <form action={createDummyRoom} className="mt-8 space-y-4">
           <input
@@ -18,11 +18,8 @@ export default function CreatePage() {
             className="w-full rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-white outline-none ring-0"
             required
           />
-          <p className="text-sm text-slate-400">Using “Test Player” will open the demo room with code 00000.</p>
-          <button
-            type="submit"
-            className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100"
-          >
+          <p className="text-sm text-slate-400">Using “Test Player” opens the demo room with code 00000 for quick local testing.</p>
+          <button type="submit" className="rounded-2xl bg-white px-5 py-3 text-base font-semibold text-slate-900 transition hover:bg-slate-100">
             Create room
           </button>
         </form>

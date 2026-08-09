@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "prisma generate && node -e \"const { execSync } = require('child_process'); if (process.env.DATABASE_URL) { execSync('prisma migrate deploy', { stdio: 'inherit' }); }\" && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --import tsx --test tests/**/*.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
@@ -31,6 +32,7 @@
     "prettier": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.20.0",
     "typescript": "^5.9.0"
   }
 }

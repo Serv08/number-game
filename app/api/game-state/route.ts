@@ -15,5 +15,18 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Room not found.' }, { status: 404 });
   }
 
-  return NextResponse.json({ game });
+  const guesses = await prisma.guess.findMany({
+    where: { gameId: game.id },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return NextResponse.json({
+    game,
+    guesses: guesses.map((guess) => ({
+      guess: guess.guess,
+      correctNumber: guess.correctNumber,
+      correctPosition: guess.correctPosition,
+      playerId: guess.playerId,
+    })),
+  });
 }
